@@ -15,7 +15,7 @@
   'use strict';
 
   // DO NOT use a very small interval, don't want to abuse BGA servers.
-  const REQUEST_INTERVAL = 700;
+  const REQUEST_INTERVAL = 300;
 
   createUi();
 
@@ -34,12 +34,15 @@
     const progressLbl = document.createElement('p');
     const button      = document.createElement('a');
 
+    countrySel.id  = 'sbCountrySelector';
+    userList.id    = 'sbUserList';
+    progressLbl.id = 'sbProgressLbl';
+
     // Labels
     countryLbl.innerText  = 'Country filter:';
     userLbl.innerText     = 'User filter:';
     limitsLbl.innerText   = 'Limits:';
     progressLbl.innerText = 'Running...';
-    progressLbl.id = 'progressLbl';
 
     //Create and append the options
     for (const [key, value] of Object.entries(COUNTRIES())) {
@@ -86,24 +89,7 @@
     button.classList = 'bgabutton bgabutton_blue';
     button.innerText = 'Run';
     button.onclick   = function() {
-      const text = userList.value;
-      const commaValues = text.split(',');
-      const semicolonValues = text.split(';');
-      const newlineValues = text.split('\n');
-      const usersFound = Math.max(commaValues.length, semicolonValues.length, newlineValues.length);
-
-      let players;
-      if (commaValues.length === usersFound) {
-        players = commaValues;
-      }
-      else if (semicolonValues.length == usersFound) {
-        players = semicolonValues;
-      }
-      else if (newlineValues.length == usersFound) {
-        players = newlineValues;
-      }
-
-      players = players.filter(x => x);
+      const players = parsePlayers(userList.value);
       run(countrySel.value, players, parseInt(limitUInput.value), parseInt(limitRInput.value));
 
       button.style.display = 'none';
@@ -123,7 +109,7 @@
       await loadMorePlayers();
       removePlayers(country, playersToKeep);
 
-      const playersSoFar = document.querySelectorAll('#mainRanking .player_in_list');
+      const playersSoFar = getVisiblePlayers();
       if (playersToKeep.length > 0 && playersToKeep.length === playersSoFar.length) {
         // Got all the required players, no need to keep querying.
         break;
@@ -132,9 +118,9 @@
       if (playersSoFar.length >= limitU) {
         // Reached limit of max number of players required.
         let i = 0;
-        for (const player of document.querySelectorAll('#mainRanking .player_in_list')) {
+        for (const player of getVisiblePlayers()) {
           if (i >= limitU) {
-            player.remove();
+            player.classList.add('hidden');
           }
           i++;
         }
@@ -144,9 +130,22 @@
       await new Promise(done => setTimeout(() => done(), REQUEST_INTERVAL));
     }
 
-    const progressLbl = document.getElementById('progressLbl');
+    const progressLbl = document.getElementById('sbProgressLbl');
+    const userList    = document.getElementById('sbUserList');
+    const countrySel = document.getElementById('sbCountrySelector');
     progressLbl.innerText = 'Done!';
     progressLbl.style.color = 'green';
+
+    countrySel.addEventListener('change', function () {
+      resetList();
+      const players = parsePlayers(userList.value);
+      removePlayers(countrySel.value, players);
+    });
+    userList.addEventListener('change', function () {
+      resetList();
+      const players = parsePlayers(userList.value);
+      removePlayers(countrySel.value, players);
+    });
   }
 
   /**
@@ -160,6 +159,44 @@
   }
 
   /**
+   * Return list of players
+   */
+  function getPlayers() {
+    return document.querySelectorAll('#mainRanking .player_in_list');
+  }
+
+  /**
+   * Return list of visible players
+   */
+  function getVisiblePlayers() {
+    return document.querySelectorAll('#mainRanking .player_in_list:not(.hidden)');
+  }
+
+  /**
+   * Parse players
+   */
+  function parsePlayers(playersStr) {
+    const commaValues = playersStr.split(',');
+    const semicolonValues = playersStr.split(';');
+    const newlineValues = playersStr.split('\n');
+    const usersFound = Math.max(commaValues.length, semicolonValues.length, newlineValues.length);
+
+    let players;
+    if (commaValues.length === usersFound) {
+      players = commaValues;
+    }
+    else if (semicolonValues.length == usersFound) {
+      players = semicolonValues;
+    }
+    else if (newlineValues.length == usersFound) {
+      players = newlineValues;
+    }
+
+    players = players.filter(x => x);
+    return players;
+  }
+
+  /**
    * Remove all players from the scoreboard except the ones
    * than belong to the country received as parameter and are
    * inside the playersToKeep array.
@@ -167,24 +204,49 @@
   function removePlayers(country, playersToKeep) {
     playersToKeep = playersToKeep.map(p => p.toLowerCase());
 
-    for (const player of document.querySelectorAll('#mainRanking .player_in_list')) {
+    for (const player of getVisiblePlayers()) {
       const name = player.querySelector('a.playername').innerText.toLowerCase();
 
       if (country && country != player.querySelector('.flag').style.backgroundPosition) {
-        player.remove();
+        player.classList.add('hidden');
       }
 
       if (playersToKeep.length > 0 && !playersToKeep.includes(name)) {
-        player.remove();
+        player.classList.add('hidden');
       }
     }
   }
 
+  /**
+   * Display all players again
+   */
+  function resetList() {
+    Array.from(getPlayers()).forEach((el) => el.classList.remove('hidden'));
+  }
+
   function COUNTRIES() { return {
     '': 'Any country',
+    '-16px -99px': 'Belgium',
     '-32px -88px': 'Brazil',
+    '-144px -88px': 'Croatia',
+    '-64px -77px': 'Colombia',
+    '-80px -55px': 'Germany',
+    '-128px -99px': 'Greece',
+    '-160px -99px': 'Italy',
+    '-176px -22px': 'Japan',
+    '-208px -33px': 'Latvia',
+    '-240px -44px': 'Mexico',
+    '-224px -99px': 'Montserrat',
+    '-272px -11px': 'Peru',
+    '-288px -11px': 'Portugal',
+    '-288px -66px': 'Romania',
+    '-288px -88px': 'Russian Federation',
+    '-320px -0px': 'Slovakia',
     '-96px -77px': 'Spain',
-    '-112px -88px': 'United Kingdom'
+    '-64px -11px': 'Switzerland',
+    '-112px -88px': 'United Kingdom',
+    '-352px -66px': 'Ukraine',
+    '-352px -44px': 'Taiwan'
   };
   }
 
