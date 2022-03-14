@@ -224,30 +224,55 @@
     Array.from(getPlayers()).forEach((el) => el.classList.remove('hidden'));
   }
 
-  function COUNTRIES() { return {
-    '': 'Any country',
-    '-16px -99px': 'Belgium',
-    '-32px -88px': 'Brazil',
-    '-144px -88px': 'Croatia',
-    '-64px -77px': 'Colombia',
-    '-80px -55px': 'Germany',
-    '-128px -99px': 'Greece',
-    '-160px -99px': 'Italy',
-    '-176px -22px': 'Japan',
-    '-208px -33px': 'Latvia',
-    '-240px -44px': 'Mexico',
-    '-224px -99px': 'Montserrat',
-    '-272px -11px': 'Peru',
-    '-288px -11px': 'Portugal',
-    '-288px -66px': 'Romania',
-    '-288px -88px': 'Russian Federation',
-    '-320px -0px': 'Slovakia',
-    '-96px -77px': 'Spain',
-    '-64px -11px': 'Switzerland',
-    '-112px -88px': 'United Kingdom',
-    '-352px -66px': 'Ukraine',
-    '-352px -44px': 'Taiwan'
-  };
+  function COUNTRIES() {
+    // IDs of the countries here are just the offset in the background image.
+    // It'd be nice to use country ids instead... Probably that would require
+    // to change the `document.querySelector('#seemoreRanking').click()` above
+    // and use an ajax call to `getRanking.html` instead.
+    return {
+      '': 'Any country',
+      '-0px -55px': 'Albania',
+      '-0px -99px': 'Argentina',
+      '-16px -22px': 'Australia',
+      '-48px -33px': 'Belarus',
+      '-16px -99px': 'Belgium',
+      '-32px -88px': 'Brazil',
+      '-48px -55px': 'Canada',
+      '-64px -44px': 'Chile',
+      '-144px -88px': 'Croatia',
+      '-64px -77px': 'Colombia',
+      '-80px -44px': 'Czech Republic',
+      '-112px -66px': 'France',
+      '-112px -11px': 'Finland',
+      '-80px -55px': 'Germany',
+      '-128px -99px': 'Greece',
+      '-144px -11px': 'Guatemala',
+      '-144px -55px': 'Hong Kong',
+      '-160px -0px': 'Hungary',
+      '-160px -99px': 'Italy',
+      '-176px -0px': 'Jamaica',
+      '-176px -22px': 'Japan',
+      '-208px -33px': 'Latvia',
+      '-208px -11px' : 'Lithuania',
+      '-240px -55px': 'Malaysia',
+      '-240px -44px': 'Mexico',
+      '-224px -99px': 'Montserrat',
+      '-256px -33px': 'Netherlands',
+      '-272px -11px': 'Peru',
+      '-272px -66px': 'Poland',
+      '-288px -11px': 'Portugal',
+      '-288px -66px': 'Romania',
+      '-288px -88px': 'Russian Federation',
+      '-320px -0px': 'Slovakia',
+      '-96px -77px': 'Spain',
+      '-64px -11px': 'Switzerland',
+      '-352px -44px': 'Taiwan',
+      '-112px -88px': 'United Kingdom',
+      '-352px -99px': 'United States',
+      '-352px -66px': 'Ukraine',
+      '-368px -22px': 'Vatican',
+      '-368px -44px': 'Venezuela'
+    };
   }
 
 })();
