@@ -154,7 +154,8 @@
   async function loadMorePlayers() {
     // Just click the button and wait.
     // Not the smartest way but works.
-    document.querySelector('#seemoreRanking').click();
+    const button = document.querySelector('#seemoreRanking') || document.querySelector('#seemore');
+    button.click();
     await new Promise(done => setTimeout(() => done(), REQUEST_INTERVAL));
   }
 
@@ -162,14 +163,24 @@
    * Return list of players
    */
   function getPlayers() {
-    return document.querySelectorAll('#mainRanking .player_in_list');
+    if (document.getElementById('mainRanking')) {
+      return document.querySelectorAll('#mainRanking .player_in_list');
+    }
+    else {
+      return document.querySelectorAll('.gameranking .player_in_list');
+    }
   }
 
   /**
    * Return list of visible players
    */
   function getVisiblePlayers() {
-    return document.querySelectorAll('#mainRanking .player_in_list:not(.hidden)');
+    if (document.getElementById('mainRanking')) {
+      return document.querySelectorAll('#mainRanking .player_in_list:not(.hidden)');
+    }
+    else {
+      return document.querySelectorAll('.gameranking .player_in_list:not(.hidden)');
+    }
   }
 
   /**
@@ -276,3 +287,4 @@
   }
 
 })();
+
