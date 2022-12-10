@@ -154,7 +154,7 @@
   async function loadMorePlayers() {
     // Just click the button and wait.
     // Not the smartest way but works.
-    const button = document.querySelector('#seemoreRanking') || document.querySelector('#seemore');
+    const button = document.querySelector('#seemoreRanking') || document.querySelector('#seemore') || document.querySelector('#seemore_rankings');
     button.click();
     await new Promise(done => setTimeout(() => done(), REQUEST_INTERVAL));
   }
