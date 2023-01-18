@@ -154,7 +154,7 @@
   async function loadMorePlayers() {
     // Just click the button and wait.
     // Not the smartest way but works.
-    const button = document.querySelector('#seemoreRanking') || document.querySelector('#seemore') || document.querySelector('#seemore_rankings');
+    const button = document.querySelector('#seemoreRanking') || document.querySelector('#seemore') || document.querySelector('#seemore_rankings') || document.querySelector('#prestige_see_more');
     button.click();
     await new Promise(done => setTimeout(() => done(), REQUEST_INTERVAL));
   }
@@ -253,36 +253,55 @@
       '-144px -88px': 'Croatia',
       '-64px -77px': 'Colombia',
       '-80px -44px': 'Czech Republic',
+      '-80px -99px': 'Dominican Republic',
       '-112px -66px': 'France',
       '-112px -11px': 'Finland',
+      '-128px -0px': 'Georgia',
       '-80px -55px': 'Germany',
       '-128px -99px': 'Greece',
       '-144px -11px': 'Guatemala',
       '-144px -55px': 'Hong Kong',
       '-160px -0px': 'Hungary',
       '-160px -99px': 'Italy',
+      '-160px -33px': 'Israel',
       '-176px -0px': 'Jamaica',
       '-176px -22px': 'Japan',
+      '-192px -33px': 'Kazakhstan',
       '-208px -33px': 'Latvia',
       '-208px -11px' : 'Lithuania',
       '-240px -55px': 'Malaysia',
+      '-224px -0px': 'Marshall Islands',
+      '-240px -11px': 'Mauritius',
       '-240px -44px': 'Mexico',
       '-224px -99px': 'Montserrat',
       '-256px -33px': 'Netherlands',
+      '-256px -0px': 'Norfolk Island',
+      '-176px -99px': 'North Korea',
+      '-256px -44px': 'Norway',
       '-272px -11px': 'Peru',
       '-272px -66px': 'Poland',
       '-288px -11px': 'Portugal',
       '-288px -66px': 'Romania',
       '-288px -88px': 'Russian Federation',
+      '-304px -22px': 'Seychelles',
+      '-304px -66px': 'Singapore',
       '-320px -0px': 'Slovakia',
+      '-192px -0px': 'South Korea',
       '-96px -77px': 'Spain',
+      '-304px -55px': 'Sweden',
       '-64px -11px': 'Switzerland',
       '-352px -44px': 'Taiwan',
+      '-336px -44px': 'Thailand',
+      '-336px -33px': 'Togo',
+      '-352px -33px': 'Tuvalu',
+      '-0px -11px': 'United Arab Emirates',
       '-112px -88px': 'United Kingdom',
       '-352px -99px': 'United States',
+      '-384px -99px': 'Unknown',
       '-352px -66px': 'Ukraine',
       '-368px -22px': 'Vatican',
-      '-368px -44px': 'Venezuela'
+      '-368px -44px': 'Venezuela',
+      '-368px -77px':'Viet Nam'
     };
   }
 
