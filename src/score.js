@@ -242,8 +242,8 @@
     // and use an ajax call to `getRanking.html` instead.
     return {
       '': 'Any country',
-      '-0px -55px': 'Albania',
-      '-0px -99px': 'Argentina',
+      '0px -55px': 'Albania',
+      '0px -99px': 'Argentina',
       '-16px -22px': 'Australia',
       '-48px -33px': 'Belarus',
       '-16px -99px': 'Belgium',
@@ -294,7 +294,7 @@
       '-336px -44px': 'Thailand',
       '-336px -33px': 'Togo',
       '-352px -33px': 'Tuvalu',
-      '-0px -11px': 'United Arab Emirates',
+      '0px -11px': 'United Arab Emirates',
       '-112px -88px': 'United Kingdom',
       '-352px -99px': 'United States',
       '-384px -99px': 'Unknown',
