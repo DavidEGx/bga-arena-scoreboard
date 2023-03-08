@@ -1,0 +1,45 @@
+#!/usr/bin/env node
+// Code to update README.md file with a bookmarlet
+// generated from src/score.js.
+//
+// 1. Change whatever you need in src/score.js
+// 2. Run bin/update/readme
+// 3. Test, commit, push, whatever.
+//
+const fs = require('fs');
+const source_code = fs.readFileSync('src/score.js', 'utf8');
+const bookmarlet = generateBookmarlet(source_code);
+
+const readme = fs.readFileSync('README.md', 'utf8');
+const updated_readme = readme.replace(/javascript:.*/, bookmarlet);
+
+fs.writeFileSync('README.md', updated_readme);
+
+function generateBookmarlet(str) {
+  // Quick & dirty "minimize" and bookmarlet generation
+  // without external libraries.
+  // It'd break any "complex" code but it suffices for src/score.js
+
+  function removeSingleLineComments(str) {
+    return str.replace(/\/\/.*/g, '');
+  }
+
+  function squashSpaces(str) {
+    const re = /\s\s/g;
+    while (str.match(re)) {
+      str = str.replace(re, '');
+    }
+    str = str.replace(/ =/g, '=');
+    str = str.replace(/= /g, '=');
+    return str;
+  }
+
+  function removeMultiLineComments(str) {
+    return str.replace(/\/\*.*?\*\//g, '');
+  }
+
+  str = removeSingleLineComments(str);
+  str = squashSpaces(str);
+  str = removeMultiLineComments(str);
+  return 'javascript:' + str;
+}

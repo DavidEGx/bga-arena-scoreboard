@@ -11,7 +11,7 @@
  *  3. Click Ok and wait until the scoreboard loads.
  */
 
-(function() {
+(() => {
   'use strict';
 
   // DO NOT use a very small interval, don't want to abuse BGA servers.
@@ -88,7 +88,7 @@
 
     button.classList = 'bgabutton bgabutton_blue';
     button.innerText = 'Run';
-    button.onclick   = function() {
+    button.onclick   = () => {
       const players = parsePlayers(userList.value);
       run(countrySel.value, players, parseInt(limitUInput.value), parseInt(limitRInput.value));
 
@@ -136,12 +136,12 @@
     progressLbl.innerText = 'Done!';
     progressLbl.style.color = 'green';
 
-    countrySel.addEventListener('change', function () {
+    countrySel.addEventListener('change', () => {
       resetList();
       const players = parsePlayers(userList.value);
       removePlayers(countrySel.value, players);
     });
-    userList.addEventListener('change', function () {
+    userList.addEventListener('change', () => {
       resetList();
       const players = parsePlayers(userList.value);
       removePlayers(countrySel.value, players);
