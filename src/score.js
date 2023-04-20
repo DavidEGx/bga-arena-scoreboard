@@ -33,6 +33,16 @@
     const limitRInput = document.createElement('input');
     const progressLbl = document.createElement('p');
     const button      = document.createElement('a');
+    const closeButton = document.createElement('span');
+
+    closeButton.innerHTML = '&#x2716;'; // Unicode cross symbol
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '1em';
+    closeButton.style.right = '1em';
+    closeButton.style.cursor = 'pointer';
+    closeButton.onclick = () => {
+      document.body.removeChild(ui);
+    };
 
     countrySel.id  = 'sbCountrySelector';
     userList.id    = 'sbUserList';
@@ -72,6 +82,7 @@
     ui.appendChild(limitUInput);
     ui.appendChild(limitRInput);
     ui.appendChild(button);
+    ui.appendChild(closeButton);
 
     // Configuration of main ui element
     ui.style.position = 'fixed';
@@ -306,4 +317,3 @@
   }
 
 })();
-
