@@ -17,6 +17,9 @@
   // DO NOT use a very small interval, don't want to abuse BGA servers.
   const REQUEST_INTERVAL = 300;
 
+  // Flag to indicate whether to stop running
+  let stopFlag = false;
+
   createUi();
 
   /**
@@ -24,16 +27,15 @@
    */
   function createUi() {
     const ui = document.createElement('div');
-    const countryLbl  = document.createElement('p');
-    const countrySel  = document.createElement('select');
-    const userLbl     = document.createElement('p');
-    const userList    = document.createElement('textArea');
-    const limitsLbl   = document.createElement('p');
-    const limitUInput = document.createElement('input');
-    const limitRInput = document.createElement('input');
-    const progressLbl = document.createElement('p');
-    const button      = document.createElement('a');
-    const closeButton = document.createElement('span');
+    const countryLbl    = document.createElement('p');
+    const countrySel    = document.createElement('select');
+    const userLbl       = document.createElement('p');
+    const userList      = document.createElement('textArea');
+    const limitsLbl     = document.createElement('p');
+    const limitUInput   = document.createElement('input');
+    const limitRInput   = document.createElement('input');
+    const button        = document.createElement('a');
+    const closeButton   = document.createElement('span');
 
     closeButton.innerHTML = '&#x2716;'; // Unicode cross symbol
     closeButton.style.position = 'absolute';
@@ -46,13 +48,11 @@
 
     countrySel.id  = 'sbCountrySelector';
     userList.id    = 'sbUserList';
-    progressLbl.id = 'sbProgressLbl';
 
     // Labels
     countryLbl.innerText  = 'Country filter:';
     userLbl.innerText     = 'User filter:';
     limitsLbl.innerText   = 'Limits:';
-    progressLbl.innerText = 'Running...';
 
     //Create and append the options
     for (const [key, value] of Object.entries(COUNTRIES())) {
@@ -71,7 +71,11 @@
     limitUInput.type  = 'number';
     limitUInput.value = 20;
     limitRInput.type  = 'number';
-    limitRInput.value = 1000;
+    limitRInput.value = 100;
+
+    // Add tooltips to limit inputs
+    limitUInput.title = 'Maximum number of players to display';
+    limitRInput.title = 'Maximum number of requests to make (each request loads 10 more players)';
 
     // Add elements to main ui element
     ui.appendChild(countryLbl);
@@ -101,10 +105,27 @@
     button.innerText = 'Run';
     button.onclick   = () => {
       const players = parsePlayers(userList.value);
-      run(countrySel.value, players, parseInt(limitUInput.value), parseInt(limitRInput.value));
+      const limitU = parseInt(limitUInput.value);
+      const limitR = parseInt(limitRInput.value);
+      const country = countrySel.value;
 
-      button.style.display = 'none';
-      ui.appendChild(progressLbl);
+      // Toggle button text and stop operation
+      if (button.innerText === 'Stop') {
+        stopFlag = true;
+        return;
+      }
+
+      // Change button text to "Stop"
+      stopFlag = false;
+      button.innerText = 'Stop';
+      button.classList = 'bgabutton bgabutton_red';
+
+      // Start the operation
+      run(country, players, limitU, limitR).then(() => {
+        // Restore button text when the operation is finished
+        button.innerText = 'Run';
+        button.classList = 'bgabutton bgabutton_blue';
+      });
     };
 
     document.body.appendChild(ui);
@@ -115,8 +136,11 @@
    * Load players, remove players not desired and repeat.
    */
   async function run(country, playersToKeep, limitU, limitR) {
-    const MAX_REQUESTS = limitR / 10;
-    for (let i = 0; i < MAX_REQUESTS; i++) {
+    for (let i = 0; i < limitR; i++) {
+      if (stopFlag) {
+        break;
+      }
+
       await loadMorePlayers();
       removePlayers(country, playersToKeep);
 
@@ -141,11 +165,8 @@
       await new Promise(done => setTimeout(() => done(), REQUEST_INTERVAL));
     }
 
-    const progressLbl = document.getElementById('sbProgressLbl');
     const userList    = document.getElementById('sbUserList');
     const countrySel = document.getElementById('sbCountrySelector');
-    progressLbl.innerText = 'Done!';
-    progressLbl.style.color = 'green';
 
     countrySel.addEventListener('change', () => {
       resetList();
@@ -261,6 +282,7 @@
       '-32px -88px': 'Brazil',
       '-48px -55px': 'Canada',
       '-64px -44px': 'Chile',
+      '-64px -66px': 'China',
       '-144px -88px': 'Croatia',
       '-64px -77px': 'Colombia',
       '-80px -44px': 'Czech Republic',
@@ -284,6 +306,7 @@
       '-224px -0px': 'Marshall Islands',
       '-240px -11px': 'Mauritius',
       '-240px -44px': 'Mexico',
+      '-208px -88px': 'Montenegro',
       '-224px -99px': 'Montserrat',
       '-256px -33px': 'Netherlands',
       '-256px -0px': 'Norfolk Island',
@@ -294,6 +317,7 @@
       '-288px -11px': 'Portugal',
       '-288px -66px': 'Romania',
       '-288px -88px': 'Russian Federation',
+      '-272px -77px': 'Saint Pierre and Miquelon',
       '-304px -22px': 'Seychelles',
       '-304px -66px': 'Singapore',
       '-320px -0px': 'Slovakia',
