@@ -250,7 +250,7 @@
     for (const player of getVisiblePlayers()) {
       const name = player.querySelector('a.playername').innerText.toLowerCase();
 
-      if (country && !player.querySelector('.flag').classList.contains(`flag_${country}`)) {
+      if (country && player.querySelector('.bga-flag').dataset.country !== country) {
         player.classList.add('hidden');
       }
 
